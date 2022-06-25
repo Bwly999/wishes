@@ -146,10 +146,17 @@ public class TaskController {
     /**
      * @param taskId 任务Id
      */
-    @ApiOperation("用户删除自己发布的任务")
+    @ApiOperation("用户取消接受的任务")
     @PostMapping("/task/{id}:unaccept")
     public Object cancelAcceptTask(@PathVariable("id") Long taskId) {
         Long userId = UserInfoUtil.getUserId();
         return Common.decorateReturnObject(taskService.cancelAcceptTask(userId, taskId));
+    }
+
+    @ApiOperation("用户完成任务")
+    @PostMapping("/task/{id}:finish")
+    public Object finishTask(@PathVariable("id") Long taskId) {
+        Long userId = UserInfoUtil.getUserId();
+        return Common.decorateReturnObject(taskService.finishTask(userId, taskId));
     }
 }

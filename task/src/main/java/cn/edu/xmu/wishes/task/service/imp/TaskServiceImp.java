@@ -166,9 +166,26 @@ public class TaskServiceImp extends ServiceImpl<TaskMapper, Task> implements Tas
         LambdaUpdateWrapper<Task> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         lambdaUpdateWrapper
                 .eq(Task::getId, taskId)
-                .eq(Task::getInitiatorId, userId)
-                .set(Task::getInitiatorId, null)
+                .eq(Task::getReceiverId, userId)
+                .set(Task::getReceiverId, null)
                 .set(Task::getState, Task.StateType.NOT_ACCEPTED);
+
+        boolean isUpdate = this.update(lambdaUpdateWrapper);
+        if (isUpdate) {
+            return ReturnObject.OK_RET;
+        } else {
+            return new ReturnObject(ReturnNo.RESOURCE_ID_OUTSCOPE, "该任务不属于你或不存在");
+        }
+    }
+
+    @Override
+    public ReturnObject finishTask(Long userId, Long taskId) {
+        LambdaUpdateWrapper<Task> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper
+                .eq(Task::getId, taskId)
+                .eq(Task::getReceiverId, userId)
+                .set(Task::getReceiverId, null)
+                .set(Task::getState, Task.StateType.FINISHED);
 
         boolean isUpdate = this.update(lambdaUpdateWrapper);
         if (isUpdate) {

@@ -22,4 +22,6 @@ public interface TaskService extends IService<Task> {
     ReturnObject deleteUserTask(Long userId, Long taskId);
 
     ReturnObject cancelAcceptTask(Long userId, Long taskId);
+
+    ReturnObject finishTask(Long userId, Long taskId);
 }
