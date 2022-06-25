@@ -245,7 +245,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
 
             user.setPassword(vo.getNewPassword());
-            this.save(user);
+            this.updateById(user);
             return new ReturnObject();
         } catch (Exception e) {
             log.error("changeUserPassword " + e.getMessage());
