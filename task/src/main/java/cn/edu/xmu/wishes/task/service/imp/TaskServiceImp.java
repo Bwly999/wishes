@@ -9,6 +9,8 @@ import cn.edu.xmu.wishes.task.model.vo.TaskRetVo;
 import cn.edu.xmu.wishes.task.model.vo.TaskVo;
 import cn.edu.xmu.wishes.task.service.TaskService;
 import cn.edu.xmu.wishes.task.service.TaskTypeService;
+import cn.edu.xmu.wishes.user.model.po.User;
+import cn.edu.xmu.wishes.user.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -26,6 +28,9 @@ public class TaskServiceImp extends ServiceImpl<TaskMapper, Task> implements Tas
 
     @Autowired
     private TaskTypeService taskTypeService;
+
+    @Autowired
+    private UserService userService;
 
     private final String taskCacheKey = "task#3600";
 
@@ -49,8 +54,20 @@ public class TaskServiceImp extends ServiceImpl<TaskMapper, Task> implements Tas
         List<TaskRetVo> taskRetVos = taskRetVoPage.getRecords();
         TaskRetVo taskRetVo;
         for(int i=0;i<taskRetVos.size();i++) {
+            Task task = tasks.getRecords().get(i);
+            if (task == null) {
+                continue;
+            }
             taskRetVo = taskRetVos.get(i);
-            taskRetVo.setType(taskTypeService.getTypeName(tasks.getRecords().get(i).getTypeId()));
+            taskRetVo.setType(taskTypeService.getTypeName(task.getTypeId()));
+
+            User user = userService.getById(task.getInitiatorId());
+            if (user == null) {
+                continue;
+            }
+            taskRetVo.setUsername(user.getUserName());
+            taskRetVo.setUserEmail(user.getEmail());
+            taskRetVo.setUserMobile(user.getMobile());
         }
         return new ReturnObject(taskRetVoPage);
     }

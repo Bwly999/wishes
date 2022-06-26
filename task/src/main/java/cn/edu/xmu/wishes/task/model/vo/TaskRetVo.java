@@ -22,5 +22,11 @@ public class TaskRetVo {
 
     private String price;
 
+    private String username;
+
+    private String userMobile;
+
+    private String userEmail;
+
     private Byte state;
 }
