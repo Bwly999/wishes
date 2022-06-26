@@ -16,8 +16,9 @@ public class UserInfoUtil {
         try {
             HttpServletRequest httpServletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             String payload = httpServletRequest.getHeader(SecurityConstants.JWT_PAYLOAD_KEY);
-
+            log.info(payload);
             String decodePayload = URLDecoder.decode(payload, "UTF-8");
+            log.info(decodePayload);
             Long userId = JacksonUtil.parseObject(decodePayload, "userId", Long.class);
             return userId;
         } catch (UnsupportedEncodingException | NullPointerException e) {
