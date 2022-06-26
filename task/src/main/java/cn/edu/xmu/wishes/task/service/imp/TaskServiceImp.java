@@ -79,8 +79,20 @@ public class TaskServiceImp extends ServiceImpl<TaskMapper, Task> implements Tas
 
         TaskRetVo taskRetVo;
         for(int i=0;i<taskRetVoList.size();i++) {
+            Task task = taskList.get(i);
+            if (task == null) {
+                continue;
+            }
             taskRetVo = taskRetVoList.get(i);
-            taskRetVo.setType(taskTypeService.getTypeName(taskList.get(i).getTypeId()));
+            taskRetVo.setType(taskTypeService.getTypeName(task.getTypeId()));
+
+            User user = userService.getById(task.getInitiatorId());
+            if (user == null) {
+                continue;
+            }
+            taskRetVo.setUsername(user.getUserName());
+            taskRetVo.setUserEmail(user.getEmail());
+            taskRetVo.setUserMobile(user.getMobile());
         }
         return new ReturnObject(taskRetVoList);
     }
