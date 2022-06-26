@@ -100,7 +100,7 @@ public class TaskController {
     @ApiOperation("通过筛选条件获取分页后的任务")
     @GetMapping("/task")
     public Object listTask(@RequestParam(required = false) Long initiatorId,  @RequestParam(required = false) Long typeId,
-                           @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
+                           @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer pageSize) {
         return Common.decorateReturnObject(taskService.listTask(initiatorId, null, typeId, page, pageSize));
     }
 
